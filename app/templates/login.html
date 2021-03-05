@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Login - Stock App{% endblock %}
+{% block content %}
+    <div class="center-div login-box">
+        <div >
+            <i class="fa fa-gift fa-2x"></i>
+            <h4> <span class="g-font">Stock App</span>
+            <br/> <small>Login To Your Account</small>
+            </h4>
+        </div>
+        <form method="post" action="http://localhost:5000/login">
+            <div class="form-group">
+                <input class="form-control" name="email" placeholder="Email">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="password" name="password" placeholder="Password">
+            </div>
+            <div class="">
+                <button class="btn btn-primary" id="log">LOGIN</button>
+            </div>
+        </form>
+        <p style="margin-top: 20px">
+            <a href="/sign-up">Already a member? Sign Up</a>
+        </p>
+    </div>
+{% endblock %}
