@@ -3,6 +3,18 @@
 {% block content %}
     <div class="center-div login-box">
         <div >
+            <!-- Error message block -->
+            <div style="color: red; margin: 5px">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <b>{{ message }}</b>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+            <!-- Error message block end-->
+
             <i class="fa fa-gift fa-2x"></i>
             <h4> <span class="g-font">Stock App</span>
             <br/> <small>Login To Your Account</small>
@@ -16,7 +28,7 @@
                 <input class="form-control" type="password" name="password" placeholder="Password">
             </div>
             <div class="">
-                <button class="btn btn-primary" id="log">LOGIN</button>
+                <button class="btn btn-primary" type="submit" id="log">LOGIN</button>
             </div>
         </form>
         <p style="margin-top: 20px">
@@ -24,3 +36,8 @@
         </p>
     </div>
 {% endblock %}
+<script>
+    $(function () {
+        let email = ''
+    })
+</script>
