@@ -1,7 +1,9 @@
 from flask import render_template, request, flash, url_for
 
-from app import app
+from app import app, db
+from app.models import User
 from app.stock_functions import is_valid_email
+import hashlib
 
 
 @app.route('/')
@@ -34,6 +36,7 @@ def sign_up():
     if request.method == 'GET':
         return render_template('sign-up.html')
     else:
+        print('testing', request.form['name'])
         name = request.form['name']
         phone = request.form['phone']
         email = request.form['email']
@@ -44,7 +47,7 @@ def sign_up():
         validated = False
         if name == '' or phone == '' or email == '' or gender == '':
             flash('All fields are required!')
-        elif len(name) < 3 or name[0].isnumeric:
+        elif len(name) < 3:
             flash('Please enter a valid name!')
         elif not is_valid_email(email):
             flash('Email is invalid !')
@@ -61,3 +64,12 @@ def sign_up():
             return render_template('sign-up.html')
         else:
             print('Form submitted')
+
+            # hash submitted password
+            password_hash = hashlib.sha256(password.encode())
+            hashed = password_hash.hexdigest()
+            user = User(name=name, phone=phone, gender=gender, password=hashed,
+                        email=email)
+            db.session.add(user)
+            db.session.commit()
+            return 'User created successfully'
