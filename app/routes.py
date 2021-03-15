@@ -1,4 +1,6 @@
-from flask import render_template, request, flash, url_for
+from datetime import timedelta
+
+from flask import render_template, request, flash, url_for, redirect, session
 
 from app import app, db
 from app.models import User
@@ -9,7 +11,19 @@ import hashlib
 @app.route('/')
 @app.route('/home')
 def home():
-    return "Welcome to stock project"
+    if 'email' in session:
+        email = session['email']
+        hashed = session['hashed']
+    else:
+        email = request.cookies.get('UserEmail')
+        hashed = request.cookies.get('Hashed')
+
+    user = User.query.filter((User.email == email) & (User.password == hashed)).first()
+
+    if user is None:
+        return redirect(url_for('login_page'))
+
+    return "Welcome to stock project {}".format(user.name)
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -28,8 +42,29 @@ def login_page():
 
         if email == '' or password == '':
             return render_template('login.html')
+        else:
+            # hash submitted password
+            password_hash = hashlib.sha256(password.encode())
+            hashed = password_hash.hexdigest()
+            user = User.query.filter((User.email == email) & (User.password == hashed)).first()
 
-        return "Email - {} Password - {}".format(email, password)
+            if user is None:
+                flash('Invalid email or password')
+                return redirect(url_for('login_page'))
+
+            # set sessions
+            # python sessions https://pythonbasics.org/flask-sessions/
+            session['email'] = email
+            session['name'] = user.name
+            session['hashed'] = hashed
+            # set cookies
+            # python cookies https://pythonbasics.org/flask-cookies/
+            resp = redirect(url_for('home'))
+            resp.set_cookie('UserEmail', email, max_age=timedelta(hours=24))
+            resp.set_cookie('Hashed', hashed, max_age=timedelta(hours=24))
+            resp.set_cookie('name', user.name, max_age=timedelta(hours=24))
+            return resp
+
 
 @app.route('/sign-up', methods=['POST', 'GET'])
 def sign_up():
@@ -72,4 +107,9 @@ def sign_up():
                         email=email)
             db.session.add(user)
             db.session.commit()
-            return 'User created successfully'
+            return redirect(url_for('success'))
+
+
+@app.route('/success')
+def success():
+    return render_template('success.html')

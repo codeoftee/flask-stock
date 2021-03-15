@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Success{% endblock %}
+{% block content %}
+
+<div class="text-center">
+    <p><i class="fa fa-check fa-3x"></i> </p>
+    <h3 class="text-success">Account Created Successfully</h3>
+    <p>
+        Welcome {{ name }}, your account was created successfully with
+        your email address "{{ email }}".
+    </p>
+</div>
+{% endblock %}
