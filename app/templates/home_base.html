@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %}</title>
+
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}">
+    <!-- end Bootstrap CSS -->
+    <!-- Fontawesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- end fontawesome -->
+    <!-- Google font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Modak&display=swap" rel="stylesheet">
+    <!-- end Google font -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/my-style.css') }}"
+    >
+</head>
+<body>
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
+    <a class="navbar-brand" href="/">Stock</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end ml-auto" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-2">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Account</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Products
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Add Products</a>
+                    <a class="dropdown-item" href="#">View Products</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Logout</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-light my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+<div class="container">
+    <!-- Error message block -->
+    <div class="text-center">
+        <div style="color: red; margin: 5px">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <b>{{ message }}</b>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+    <!-- Error message block end-->
+</div>
+{% block content %}
+
+{% endblock %}
+<script src="{{ url_for('static', filename='js/jquery3.min.js') }}"></script>
+<script src="{{ url_for('static', filename='bootstrap/js/bootstrap.js') }}"></script>
+</body>
+</html>

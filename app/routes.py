@@ -4,26 +4,17 @@ from flask import render_template, request, flash, url_for, redirect, session
 
 from app import app, db
 from app.models import User
-from app.stock_functions import is_valid_email
+from app.stock_functions import is_valid_email, check_login
 import hashlib
 
 
 @app.route('/')
 @app.route('/home')
 def home():
-    if 'email' in session:
-        email = session['email']
-        hashed = session['hashed']
-    else:
-        email = request.cookies.get('UserEmail')
-        hashed = request.cookies.get('Hashed')
-
-    user = User.query.filter((User.email == email) & (User.password == hashed)).first()
-
-    if user is None:
+    user = check_login()
+    if not user:
         return redirect(url_for('login_page'))
-
-    return "Welcome to stock project {}".format(user.name)
+    return render_template('home_page.html', user=user)
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -107,9 +98,17 @@ def sign_up():
                         email=email)
             db.session.add(user)
             db.session.commit()
+            # set sessions
+            # python sessions https://pythonbasics.org/flask-sessions/
+            session['email'] = email
+            session['name'] = user.name
+            session['hashed'] = hashed
             return redirect(url_for('success'))
 
 
 @app.route('/success')
 def success():
-    return render_template('success.html')
+    user = check_login()
+    if not user:
+        return redirect(url_for('login_page'))
+    return render_template('success.html', name=user.name, email=user.email)
