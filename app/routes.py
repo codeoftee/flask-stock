@@ -112,3 +112,25 @@ def success():
     if not user:
         return redirect(url_for('login_page'))
     return render_template('success.html', name=user.name, email=user.email)
+
+
+@app.route('/logout')
+def logout():
+    # remove sessions
+    session['email'] = None
+    session['name'] = None
+    session['hashed'] = None
+    # remove cookies
+    resp = redirect(url_for('login_page'))
+    resp.set_cookie('UserEmail', '', expires=0)
+    resp.set_cookie('Hashed', '', expires=0)
+    resp.set_cookie('name', '', expires=0)
+    return resp
+
+
+@app.route('/my-profile')
+def profile_page():
+    user = check_login()
+    if not user:
+        return redirect(url_for('login_page'))
+    return render_template('profile.html', user=user)
