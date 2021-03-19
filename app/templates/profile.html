@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'home_base.html' %}
+{% block title %}My Profile{% endblock %}
+{% block content %}
 
-</body>
-</html>
+    <div class="container">
+    <div class="center-div" style="width: 50%">
+        <div class="m-3">
+            <img src="https://paitee.cloudifymedia.com/static/uploads/CklcVjNnO5VWkNlvN259AuelD372/Snapchat-1033275017.jpg" alt="Avatar" class="avatar">
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item">Name: <b>{{ user.name }}</b></li>
+            <li class="list-group-item">Email: <b>{{ user.email }}</b></li>
+            <li class="list-group-item">Phone: <b>{{ user.phone }}</b></li>
+            <li class="list-group-item">Gender: <b>{{ user.gender }}</b></li>
+        </ul>
+
+        <div style="margin-top: 20px">
+            <a href="/logout" class="btn btn-primary">Logout <i class="fa fa-sign-out"></i> </a>
+        </div>
+    </div>
+    </div>
+
+{% endblock %}
